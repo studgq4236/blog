@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 import markdown
-from .models import Post
+from .models import Post, Category
 from django.shortcuts import render, get_object_or_404
 
 
@@ -30,5 +30,11 @@ def archives(request, year, month):
 									created_time__month=month,
 									).order_by('-created_time')
 	return render(request, 'blog/index.html',context={'post_list':post_list})
+
+
+def category(request,pk):
+	cate = get_object_or_404(Category,pk=pk)
+	post_list = Post.objects.filter(category=cate).order_by('-created_time')
+	return render(request,'blog/index.html',context={'post_list':post_list})
 
 
